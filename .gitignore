@@ -1,0 +1,4 @@
+.coverage
+.git-rm-branch.yml
+coverage.txt
+profile.out
