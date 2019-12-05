@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/suzuki-shunsuke/go-error-with-exit-code"
+	"github.com/suzuki-shunsuke/go-error-with-exit-code/ecerror"
 )
 
 func createUser() error {
