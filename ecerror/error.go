@@ -17,14 +17,23 @@ func Wrap(err error, code int) error {
 }
 
 func (err *withExitCodeError) ExitCode() int {
+	if err == nil {
+		return 0
+	}
 	return err.code
 }
 
 func (err *withExitCodeError) Error() string {
+	if err == nil || err.err == nil {
+		return ""
+	}
 	return err.err.Error()
 }
 
 func (err *withExitCodeError) Unwrap() error {
+	if err == nil {
+		return nil
+	}
 	return err.err
 }
 
