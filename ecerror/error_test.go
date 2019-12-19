@@ -15,35 +15,95 @@ func TestWrap(t *testing.T) {
 }
 
 func Test_withExitCodeError_ExitCode(t *testing.T) {
-	err := &withExitCodeError{
-		code: 5,
+	data := []struct {
+		title string
+		err   *withExitCodeError
+		exp   int
+	}{
+		{
+			err: &withExitCodeError{
+				code: 5,
+			},
+			exp: 5,
+		},
+		{
+			err: nil,
+			exp: 0,
+		},
 	}
-	exp := 5
-	act := err.ExitCode()
-	if act != exp {
-		t.Fatalf("err.ExitCode() got %d, want %d", act, exp)
+	for _, d := range data {
+		t.Run(d.title, func(t *testing.T) {
+			act := d.err.ExitCode()
+			if act != d.exp {
+				t.Fatalf("err.ExitCode() got %d, want %d", act, d.exp)
+			}
+		})
 	}
 }
 
 func Test_withExitCodeError_Error(t *testing.T) {
-	exp := "hello"
-	err := &withExitCodeError{
-		err: errors.New(exp),
+	data := []struct {
+		title string
+		err   *withExitCodeError
+		exp   string
+	}{
+		{
+			title: "normal",
+			err: &withExitCodeError{
+				err: errors.New("hello"),
+			},
+			exp: "hello",
+		},
+		{
+			title: "err.err is nil",
+			err: &withExitCodeError{
+				err: nil,
+			},
+			exp: "",
+		},
+		{
+			title: "err is nil",
+			err:   nil,
+			exp:   "",
+		},
 	}
-	act := err.Error()
-	if act != exp {
-		t.Fatalf("err.Error() got %s, want %s", act, exp)
+	for _, d := range data {
+		t.Run(d.title, func(t *testing.T) {
+			act := d.err.Error()
+			if act != d.exp {
+				t.Fatalf("err.Error() got %s, want %s", act, d.exp)
+			}
+		})
 	}
 }
 
 func Test_withExitCodeError_Unwrap(t *testing.T) {
-	exp := errors.New("hello")
-	err := &withExitCodeError{
-		err: exp,
+	helloError := errors.New("hello")
+	data := []struct {
+		title string
+		err   *withExitCodeError
+		exp   error
+	}{
+		{
+			title: "normal",
+			err: &withExitCodeError{
+				err: helloError,
+			},
+			exp: helloError,
+		},
+		{
+			title: "err is nil",
+			err:   nil,
+			exp:   nil,
+		},
 	}
-	act := err.Unwrap()
-	if act != exp {
-		t.Fatalf("err.Error() got %v, want %v", act, exp)
+	for _, d := range data {
+		t.Run(d.title, func(t *testing.T) {
+			act := d.err.Unwrap()
+			if !errors.Is(act, d.exp) {
+				t.Fatalf("err.Unwrap() got %v, want %v", act, d.exp)
+			}
+		})
 	}
 }
 
