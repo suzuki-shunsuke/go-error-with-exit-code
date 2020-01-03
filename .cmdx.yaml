@@ -9,7 +9,12 @@ tasks:
   short: c
   description: test coverage
   usage: test coverage
-  script: bash scripts/coverage.sh
+  script: 'bash scripts/coverage.sh "{{.package}}"'
+  args:
+  - name: package
+    usage: package directory path
+    description: package directory path
+    default: ecerror
 - name: test
   short: t
   description: test
