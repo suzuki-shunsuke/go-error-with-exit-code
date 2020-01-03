@@ -1,5 +1,19 @@
 ---
 kind: pipeline
+name: shell scripts
+clone:
+  depth: 1
+steps:
+- name: shellcheck
+  image: koalaman/shellcheck-alpine:v0.7.0
+  commands:
+  - shellcheck scripts/* githooks/*
+- name: shfmt
+  image: mvdan/shfmt:v3.0.0
+  commands:
+  - shfmt -d .
+---
+kind: pipeline
 name: build
 clone:
   depth: 1
