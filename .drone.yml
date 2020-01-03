@@ -1,5 +1,19 @@
 ---
 kind: pipeline
+name: shell scripts
+clone:
+  depth: 1
+steps:
+- name: shellcheck
+  image: koalaman/shellcheck-alpine:v0.7.0
+  commands:
+  - shellcheck scripts/* githooks/*
+- name: shfmt
+  image: mvdan/shfmt:v3.0.0
+  commands:
+  - shfmt -d .
+---
+kind: pipeline
 name: build
 clone:
   depth: 1
@@ -8,7 +22,7 @@ volumes:
   temp: {}
 steps:
 - name: download go modules
-  image: &image_go golang:1.13.4
+  image: &image_go golang:1.13.5
   commands:
   - go mod download
   volumes: &volumes
@@ -17,7 +31,7 @@ steps:
   environment:
     GOPATH: /go
 - name: golangci-lint
-  image: golangci/golangci-lint:v1.21.0-alpine
+  image: golangci/golangci-lint:v1.22.2-alpine
   commands:
   - golangci-lint run
   environment:
@@ -27,7 +41,7 @@ steps:
   image: *image_go
   commands:
   # bash and cgo seem to be required
-  - bash scripts/codecov-test.sh
+  - bash scripts/codecov_test.sh
   - curl -s https://codecov.io/bash > /tmp/codecov.sh
   - test "$LOCAL" = "true" -o "$DRONE_BUILD_EVENT" = "pull_request" || bash /tmp/codecov.sh
   environment:
