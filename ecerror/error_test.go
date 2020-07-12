@@ -8,7 +8,7 @@ import (
 func TestWrap(t *testing.T) {
 	baseErr := errors.New("hello")
 	err := Wrap(baseErr, 1)
-	e := err.(*withExitCodeError)
+	e := err.(withExitCodeError)
 	if e.err != baseErr {
 		t.Fatal("err.err != baseErr")
 	}
@@ -17,18 +17,14 @@ func TestWrap(t *testing.T) {
 func Test_withExitCodeError_ExitCode(t *testing.T) {
 	data := []struct {
 		title string
-		err   *withExitCodeError
+		err   withExitCodeError
 		exp   int
 	}{
 		{
-			err: &withExitCodeError{
+			err: withExitCodeError{
 				code: 5,
 			},
 			exp: 5,
-		},
-		{
-			err: nil,
-			exp: 0,
 		},
 	}
 	for _, d := range data {
@@ -44,27 +40,22 @@ func Test_withExitCodeError_ExitCode(t *testing.T) {
 func Test_withExitCodeError_Error(t *testing.T) {
 	data := []struct {
 		title string
-		err   *withExitCodeError
+		err   withExitCodeError
 		exp   string
 	}{
 		{
 			title: "normal",
-			err: &withExitCodeError{
+			err: withExitCodeError{
 				err: errors.New("hello"),
 			},
 			exp: "hello",
 		},
 		{
 			title: "err.err is nil",
-			err: &withExitCodeError{
+			err: withExitCodeError{
 				err: nil,
 			},
 			exp: "",
-		},
-		{
-			title: "err is nil",
-			err:   nil,
-			exp:   "",
 		},
 	}
 	for _, d := range data {
@@ -81,20 +72,15 @@ func Test_withExitCodeError_Unwrap(t *testing.T) {
 	helloError := errors.New("hello")
 	data := []struct {
 		title string
-		err   *withExitCodeError
+		err   withExitCodeError
 		exp   error
 	}{
 		{
 			title: "normal",
-			err: &withExitCodeError{
+			err: withExitCodeError{
 				err: helloError,
 			},
 			exp: helloError,
-		},
-		{
-			title: "err is nil",
-			err:   nil,
-			exp:   nil,
 		},
 	}
 	for _, d := range data {
@@ -125,7 +111,7 @@ func TestGetExitCode(t *testing.T) {
 		},
 		{
 			title: "withExitCodeError",
-			err: &withExitCodeError{
+			err: withExitCodeError{
 				code: 5,
 			},
 			exp: 5,
