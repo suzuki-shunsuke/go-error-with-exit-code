@@ -8,7 +8,7 @@ import (
 func TestWrap(t *testing.T) {
 	baseErr := errors.New("hello")
 	err := Wrap(baseErr, 1)
-	e := err.(*withExitCodeError)
+	e := err.(withExitCodeError)
 	if e.err != baseErr {
 		t.Fatal("err.err != baseErr")
 	}
@@ -17,21 +17,18 @@ func TestWrap(t *testing.T) {
 func Test_withExitCodeError_ExitCode(t *testing.T) {
 	data := []struct {
 		title string
-		err   *withExitCodeError
+		err   withExitCodeError
 		exp   int
 	}{
 		{
-			err: &withExitCodeError{
+			err: withExitCodeError{
 				code: 5,
 			},
 			exp: 5,
 		},
-		{
-			err: nil,
-			exp: 0,
-		},
 	}
 	for _, d := range data {
+		d := d
 		t.Run(d.title, func(t *testing.T) {
 			act := d.err.ExitCode()
 			if act != d.exp {
@@ -44,30 +41,26 @@ func Test_withExitCodeError_ExitCode(t *testing.T) {
 func Test_withExitCodeError_Error(t *testing.T) {
 	data := []struct {
 		title string
-		err   *withExitCodeError
+		err   withExitCodeError
 		exp   string
 	}{
 		{
 			title: "normal",
-			err: &withExitCodeError{
+			err: withExitCodeError{
 				err: errors.New("hello"),
 			},
 			exp: "hello",
 		},
 		{
 			title: "err.err is nil",
-			err: &withExitCodeError{
+			err: withExitCodeError{
 				err: nil,
 			},
 			exp: "",
 		},
-		{
-			title: "err is nil",
-			err:   nil,
-			exp:   "",
-		},
 	}
 	for _, d := range data {
+		d := d
 		t.Run(d.title, func(t *testing.T) {
 			act := d.err.Error()
 			if act != d.exp {
@@ -81,23 +74,19 @@ func Test_withExitCodeError_Unwrap(t *testing.T) {
 	helloError := errors.New("hello")
 	data := []struct {
 		title string
-		err   *withExitCodeError
+		err   withExitCodeError
 		exp   error
 	}{
 		{
 			title: "normal",
-			err: &withExitCodeError{
+			err: withExitCodeError{
 				err: helloError,
 			},
 			exp: helloError,
 		},
-		{
-			title: "err is nil",
-			err:   nil,
-			exp:   nil,
-		},
 	}
 	for _, d := range data {
+		d := d
 		t.Run(d.title, func(t *testing.T) {
 			act := d.err.Unwrap()
 			if !errors.Is(act, d.exp) {
@@ -125,13 +114,14 @@ func TestGetExitCode(t *testing.T) {
 		},
 		{
 			title: "withExitCodeError",
-			err: &withExitCodeError{
+			err: withExitCodeError{
 				code: 5,
 			},
 			exp: 5,
 		},
 	}
 	for _, d := range data {
+		d := d
 		t.Run(d.title, func(t *testing.T) {
 			act := GetExitCode(d.err)
 			if act != d.exp {
