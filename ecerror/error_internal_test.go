@@ -28,6 +28,7 @@ func Test_withExitCodeError_ExitCode(t *testing.T) {
 		},
 	}
 	for _, d := range data {
+		d := d
 		t.Run(d.title, func(t *testing.T) {
 			act := d.err.ExitCode()
 			if act != d.exp {
@@ -59,6 +60,7 @@ func Test_withExitCodeError_Error(t *testing.T) {
 		},
 	}
 	for _, d := range data {
+		d := d
 		t.Run(d.title, func(t *testing.T) {
 			act := d.err.Error()
 			if act != d.exp {
@@ -84,6 +86,7 @@ func Test_withExitCodeError_Unwrap(t *testing.T) {
 		},
 	}
 	for _, d := range data {
+		d := d
 		t.Run(d.title, func(t *testing.T) {
 			act := d.err.Unwrap()
 			if !errors.Is(act, d.exp) {
@@ -118,6 +121,7 @@ func TestGetExitCode(t *testing.T) {
 		},
 	}
 	for _, d := range data {
+		d := d
 		t.Run(d.title, func(t *testing.T) {
 			act := GetExitCode(d.err)
 			if act != d.exp {
