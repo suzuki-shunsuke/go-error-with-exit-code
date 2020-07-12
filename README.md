@@ -11,7 +11,7 @@ Golang library to set the exit code to the error.
 
 ## Example
 
-Please see [examples](examples/example.go).
+Please see [examples](ecerror/example_test.go).
 
 ## License
 

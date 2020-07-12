@@ -1,4 +1,4 @@
-package examples
+package ecerror_test
 
 import (
 	"errors"
