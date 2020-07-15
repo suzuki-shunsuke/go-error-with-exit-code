@@ -4,7 +4,7 @@
   ],
   "packageRules": [
     {
-      "packageName": ["golang"],
+      "packageNames": ["golang"],
       "updateTypes": ["minor", "patch", "pin", "digest"],
       "automerge": true
     }
