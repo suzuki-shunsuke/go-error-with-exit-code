@@ -4,3 +4,4 @@ linters:
   disable:
   - wsl
   - goerr113
+  - nlreturn
