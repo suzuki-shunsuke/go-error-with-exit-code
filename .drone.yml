@@ -22,7 +22,7 @@ volumes:
   temp: {}
 steps:
 - name: download go modules
-  image: golang:1.17.2
+  image: golang:1.17.3
   commands:
   - go mod download
   volumes: &volumes
@@ -34,7 +34,7 @@ steps:
   - golangci-lint run
   volumes: *volumes
 - name: codecov
-  image: golang:1.17.2
+  image: golang:1.17.3
   commands:
   # bash and cgo seem to be required
   - bash scripts/codecov_test.sh
