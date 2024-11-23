@@ -6,15 +6,21 @@ import (
 )
 
 func TestWrap(t *testing.T) {
+	t.Parallel()
 	baseErr := errors.New("hello")
 	err := Wrap(baseErr, 1)
-	e := err.(withExitCodeError)
-	if e.err != baseErr {
-		t.Fatal("err.err != baseErr")
+	var e withExitCodeError
+	if errors.As(err, &e) {
+		if !errors.Is(e.err, baseErr) {
+			t.Fatal("err.err != baseErr")
+		}
+		return
 	}
+	t.Fatal("error must be withExitCodeError")
 }
 
 func Test_withExitCodeError_ExitCode(t *testing.T) {
+	t.Parallel()
 	data := []struct {
 		title string
 		err   withExitCodeError
@@ -28,8 +34,8 @@ func Test_withExitCodeError_ExitCode(t *testing.T) {
 		},
 	}
 	for _, d := range data {
-		d := d
 		t.Run(d.title, func(t *testing.T) {
+			t.Parallel()
 			act := d.err.ExitCode()
 			if act != d.exp {
 				t.Fatalf("err.ExitCode() got %d, want %d", act, d.exp)
@@ -39,6 +45,7 @@ func Test_withExitCodeError_ExitCode(t *testing.T) {
 }
 
 func Test_withExitCodeError_Error(t *testing.T) {
+	t.Parallel()
 	data := []struct {
 		title string
 		err   withExitCodeError
@@ -60,8 +67,8 @@ func Test_withExitCodeError_Error(t *testing.T) {
 		},
 	}
 	for _, d := range data {
-		d := d
 		t.Run(d.title, func(t *testing.T) {
+			t.Parallel()
 			act := d.err.Error()
 			if act != d.exp {
 				t.Fatalf("err.Error() got %s, want %s", act, d.exp)
@@ -71,6 +78,7 @@ func Test_withExitCodeError_Error(t *testing.T) {
 }
 
 func Test_withExitCodeError_Unwrap(t *testing.T) {
+	t.Parallel()
 	helloError := errors.New("hello")
 	data := []struct {
 		title string
@@ -86,8 +94,8 @@ func Test_withExitCodeError_Unwrap(t *testing.T) {
 		},
 	}
 	for _, d := range data {
-		d := d
 		t.Run(d.title, func(t *testing.T) {
+			t.Parallel()
 			act := d.err.Unwrap()
 			if !errors.Is(act, d.exp) {
 				t.Fatalf("err.Unwrap() got %v, want %v", act, d.exp)
@@ -97,6 +105,7 @@ func Test_withExitCodeError_Unwrap(t *testing.T) {
 }
 
 func TestGetExitCode(t *testing.T) {
+	t.Parallel()
 	data := []struct {
 		title string
 		err   error
@@ -121,8 +130,8 @@ func TestGetExitCode(t *testing.T) {
 		},
 	}
 	for _, d := range data {
-		d := d
 		t.Run(d.title, func(t *testing.T) {
+			t.Parallel()
 			act := GetExitCode(d.err)
 			if act != d.exp {
 				t.Fatalf("GetExitCode(err) got %d, want %d", act, d.exp)
