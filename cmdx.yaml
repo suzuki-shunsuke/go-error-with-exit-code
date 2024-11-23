@@ -19,7 +19,7 @@ tasks:
   short: t
   description: test
   usage: test
-  script: go test ./... -covermode=atomic
+  script: go test -race -covermode=atomic ./...
 - name: fmt
   description: format the go code
   usage: format the go code
@@ -34,17 +34,11 @@ tasks:
   description: lint the go code
   usage: lint the go code
   script: golangci-lint run
-- name: ci-local
-  description: run the Drone pipeline at localhost (drone-cli is required)
-  usage: run the Drone pipeline at localhost (drone-cli is required)
-  script: time drone exec --pipeline build --event pull_request
-  environment:
-    LOCAL: "true"
 - name: shellcheck
   description: shellcheck
   usage: shellcheck
-  script: shellcheck scripts/* githooks/*
+  script: shellcheck scripts/*
 - name: shfmt
   description: shfmt
   usage: shfmt
-  script: shfmt -l -w scripts/* githooks/*
+  script: shfmt -l -w scripts/*
