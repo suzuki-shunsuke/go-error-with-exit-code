@@ -14,6 +14,7 @@ func Wrap(err error, code int) error {
 		err:  err,
 		code: code,
 	}
+
 }
 
 func (err withExitCodeError) ExitCode() int {
