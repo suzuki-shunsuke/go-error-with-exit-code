@@ -42,4 +42,3 @@ tasks:
   description: shfmt
   usage: shfmt
   script: shfmt -l -w scripts/*
-
