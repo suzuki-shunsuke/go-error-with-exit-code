@@ -1,12 +1,33 @@
----
+version: "2"
 linters:
-  enable-all: true
+  default: all
   disable:
-    - wsl
-    - err113
-    - nlreturn
-    - execinquery # WARN The linter 'execinquery' is deprecated (since v1.58.0) due to: The repository of the linter has been archived by the owner.  
-    - exportloopref # WARN The linter 'exportloopref' is deprecated (since v1.60.2) due to: Since Go1.22 (loopvar) this linter is no longer relevant. Replaced by copyloopvar. 
-    - gomnd # WARN The linter 'gomnd' is deprecated (since v1.58.0) due to: The linter has been renamed. Replaced by mnd. 
-    - exhaustruct
     - depguard
+    - err113
+    - exhaustruct
+    - mnd
+    - nlreturn
+    - wsl
+  exclusions:
+    generated: lax
+    presets:
+      - comments
+      - common-false-positives
+      - legacy
+      - std-error-handling
+    paths:
+      - third_party$
+      - builtin$
+      - examples$
+formatters:
+  enable:
+    - gci
+    - gofmt
+    - gofumpt
+    - goimports
+  exclusions:
+    generated: lax
+    paths:
+      - third_party$
+      - builtin$
+      - examples$
