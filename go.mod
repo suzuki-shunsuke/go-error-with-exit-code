@@ -1,3 +1,3 @@
 module github.com/suzuki-shunsuke/go-error-with-exit-code
 
-go 1.22.2
+go 1.25
