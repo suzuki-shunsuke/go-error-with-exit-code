@@ -6,6 +6,7 @@ linters:
     - err113
     - exhaustruct
     - exhaustruct_v5
+    - gomodguard
     - mnd
     - nlreturn
     - wsl
